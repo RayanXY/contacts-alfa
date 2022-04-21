@@ -14,7 +14,7 @@
          v-if="contacts.length > 0"
          class="row"
       >
-         <div v-for="(contact, index) in contacts" :key="index" class="col-4 mb-2">
+         <div v-for="contact in contacts" :key="contact.id" class="col-4 mb-2">
             <contact-card :contact="contact" />
          </div>
       </div>
@@ -36,9 +36,18 @@ export default {
       }
    },
    mounted() {
-      if(localStorage.getItem('contacts') !== null) {
-         this.contacts = JSON.parse(localStorage.getItem('contacts'))
-      }
+      console.log('Montou')
+      this.getContacts()
+      this.$root.$on('contactDeleted', () => {
+         this.getContacts()
+      })
    },
+   methods: {
+      getContacts() {
+         if(localStorage.getItem('contacts') !== null) {
+            this.contacts = JSON.parse(localStorage.getItem('contacts'))
+         }
+      },
+   }
 };
 </script>

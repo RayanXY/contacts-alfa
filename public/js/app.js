@@ -5293,6 +5293,17 @@ __webpack_require__.r(__webpack_exports__);
       type: Object,
       required: true
     }
+  },
+  methods: {
+    deleteContact: function deleteContact(id) {
+      var contacts = JSON.parse(localStorage.getItem('contacts'));
+      var index = contacts.findIndex(function (c) {
+        return c.id === id;
+      });
+      contacts.splice(index, 1);
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+      this.$root.$emit('contactDeleted');
+    }
   }
 });
 
@@ -5309,7 +5320,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
 //
 //
 //
@@ -5446,8 +5456,19 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    if (localStorage.getItem('contacts') !== null) {
-      this.contacts = JSON.parse(localStorage.getItem('contacts'));
+    var _this = this;
+
+    console.log('Montou');
+    this.getContacts();
+    this.$root.$on('contactDeleted', function () {
+      _this.getContacts();
+    });
+  },
+  methods: {
+    getContacts: function getContacts() {
+      if (localStorage.getItem('contacts') !== null) {
+        this.contacts = JSON.parse(localStorage.getItem('contacts'));
+      }
     }
   }
 });
@@ -28236,7 +28257,22 @@ var render = function () {
           ]),
         ]),
         _vm._v(" "),
-        _vm._m(0),
+        _c("div", { staticClass: "col-md-3" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-danger",
+              on: {
+                click: function ($event) {
+                  return _vm.deleteContact(_vm.contact.id)
+                },
+              },
+            },
+            [_c("i", { staticClass: "fa fa-trash" })]
+          ),
+        ]),
       ]),
     ]
   )
@@ -28246,14 +28282,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-3" }, [
-      _c("button", { staticClass: "btn btn-outline-primary mt-1 mb-3" }, [
-        _c("i", { staticClass: "fa fa-pencil" }),
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-danger" }, [
-        _c("i", { staticClass: "fa fa-trash" }),
-      ]),
+    return _c("button", { staticClass: "btn btn-outline-primary mt-1 mb-3" }, [
+      _c("i", { staticClass: "fa fa-pencil" }),
     ])
   },
 ]
@@ -28405,10 +28435,10 @@ var render = function () {
       ? _c(
           "div",
           { staticClass: "row" },
-          _vm._l(_vm.contacts, function (contact, index) {
+          _vm._l(_vm.contacts, function (contact) {
             return _c(
               "div",
-              { key: index, staticClass: "col-4 mb-2" },
+              { key: contact.id, staticClass: "col-4 mb-2" },
               [_c("contact-card", { attrs: { contact: contact } })],
               1
             )

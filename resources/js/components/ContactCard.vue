@@ -13,7 +13,7 @@
          </div>
          <div class="col-md-3">
             <button class="btn btn-outline-primary mt-1 mb-3"><i class="fa fa-pencil"></i></button>
-            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+            <button @click="deleteContact(contact.id)" class="btn btn-danger"><i class="fa fa-trash"></i></button>
          </div>
       </div>
    </div>
@@ -23,6 +23,17 @@
 export default {
    props: {
       contact: { type: Object, required: true }
-   }
+   },
+   methods: {
+      deleteContact(id) {
+         let contacts = JSON.parse(localStorage.getItem('contacts'))
+         let index = contacts.findIndex(c => c.id === id)
+         
+         contacts.splice(index, 1)
+         localStorage.setItem('contacts', JSON.stringify(contacts))
+         
+         this.$root.$emit('contactDeleted')
+      }
+   },
 }
 </script>

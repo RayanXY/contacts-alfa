@@ -18,7 +18,6 @@
             <span>Image:</span>
             <input type="file" @change="imageChange" placeholder="E-mail" accept="image/*">
          </div>
-
          <button class="btn btn-primary" @click="save">Save</button>
       </div>
    </div>
