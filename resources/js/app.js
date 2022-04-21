@@ -23,6 +23,7 @@ window.Vue = require('vue').default;
 
 Vue.component('contacts-list', require('./pages/ContactsList.vue').default);
 Vue.component('add-contact', require('./pages/AddContact.vue').default);
+Vue.component('contact-card', require('./components/ContactCard.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

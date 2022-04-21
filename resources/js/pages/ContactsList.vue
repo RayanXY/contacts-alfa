@@ -1,25 +1,35 @@
 <template>
-   <div class="p-3">
-      <h2>Contacts List</h2>
+   <div class="container p-3">
+      <div class="row justify-content-between mb-2">
+         <div class="col-auto">
+            <h2>Contacts List</h2>
+         </div>
+         <div class="col-auto">
+            <a href="/add-contact" class="btn btn-primary">Add Contact</a>
+         </div>
 
-      <div v-if="contacts.length > 0">
-         <p>Name: {{ contacts[0].name }}</p>
-         <p>Number: {{ contacts[0].number }}</p>
-         <p>E-mail: {{ contacts[0].email }}</p>
-         Img: <img :src="contacts[0].image" width="100" height="150"/>
+      </div>
+
+      <div
+         v-if="contacts.length > 0"
+         class="row"
+      >
+         <div v-for="(contact, index) in contacts" :key="index" class="col-4 mb-2">
+            <contact-card :contact="contact" />
+         </div>
       </div>
 
       <div v-else>
          Empty contact list
       </div>
 
-      <a href="/add-contact">Add Contact</a>
-      
    </div>
 </template>
 
 <script>
+import ContactCard from '../components/ContactCard.vue';
 export default {
+  components: { ContactCard },
    data() {
       return {
          contacts: ''
