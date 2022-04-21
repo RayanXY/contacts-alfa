@@ -28,11 +28,14 @@
 
 <script>
 import ContactCard from '../components/ContactCard.vue';
+
 export default {
-  components: { ContactCard },
+  components: { 
+     ContactCard 
+   },
    data() {
       return {
-         contacts: ''
+         contacts: '',
       }
    },
    mounted() {

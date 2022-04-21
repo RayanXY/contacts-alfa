@@ -5287,6 +5287,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     contact: {
@@ -5296,13 +5298,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     deleteContact: function deleteContact(id) {
-      var contacts = JSON.parse(localStorage.getItem('contacts'));
-      var index = contacts.findIndex(function (c) {
-        return c.id === id;
-      });
-      contacts.splice(index, 1);
-      localStorage.setItem('contacts', JSON.stringify(contacts));
-      this.$root.$emit('contactDeleted');
+      var result = confirm("Do you want to delete ".concat(this.contact.name, "'s contact?"));
+
+      if (result) {
+        var contacts = JSON.parse(localStorage.getItem('contacts'));
+        var index = contacts.findIndex(function (c) {
+          return c.id === id;
+        });
+        contacts.splice(index, 1);
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+        this.$root.$emit('contactDeleted');
+      }
     }
   }
 });
@@ -28229,53 +28235,55 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "card p-3", staticStyle: { "max-width": "540px" } },
-    [
-      _c("div", { staticClass: "row no-gutters" }, [
-        _c("div", { staticClass: "col-md-3 col-lg-3" }, [
-          _c("img", {
-            staticClass: "rounded my-auto",
-            attrs: { src: _vm.contact.image, width: "85", height: "110" },
-          }),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c("h4", { staticClass: "card-title" }, [
-              _vm._v(_vm._s(_vm.contact.name)),
-            ]),
-            _vm._v(" "),
-            _c("p", { staticClass: "card-text mb-0" }, [
-              _vm._v(_vm._s(_vm.contact.number)),
-            ]),
-            _vm._v(" "),
-            _c("p", { staticClass: "card-text" }, [
-              _vm._v(_vm._s(_vm.contact.email)),
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "card p-3", staticStyle: { "max-width": "540px" } },
+      [
+        _c("div", { staticClass: "row no-gutters" }, [
+          _c("div", { staticClass: "col-md-3 col-lg-3" }, [
+            _c("img", {
+              staticClass: "rounded my-auto",
+              attrs: { src: _vm.contact.image, width: "85", height: "110" },
+            }),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-6" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("h4", { staticClass: "card-title" }, [
+                _vm._v(_vm._s(_vm.contact.name)),
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text mb-0" }, [
+                _vm._v(_vm._s(_vm.contact.number)),
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(_vm._s(_vm.contact.email)),
+              ]),
             ]),
           ]),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-3" }, [
-          _vm._m(0),
           _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-danger",
-              on: {
-                click: function ($event) {
-                  return _vm.deleteContact(_vm.contact.id)
+          _c("div", { staticClass: "col-md-3" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                on: {
+                  click: function ($event) {
+                    return _vm.deleteContact(_vm.contact.id)
+                  },
                 },
               },
-            },
-            [_c("i", { staticClass: "fa fa-trash" })]
-          ),
+              [_c("i", { staticClass: "fa fa-trash" })]
+            ),
+          ]),
         ]),
-      ]),
-    ]
-  )
+      ]
+    ),
+  ])
 }
 var staticRenderFns = [
   function () {
