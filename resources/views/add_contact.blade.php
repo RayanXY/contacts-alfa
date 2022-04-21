@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Contats</title>
+        <title>Add Contacts</title>
 
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     </head>
 
     <body>
         <div id="app">
-            <contacts-list />
+            <add-contact />
         </div>
     </body>
 
