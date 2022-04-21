@@ -1,9 +1,9 @@
 <template>
-   <div>
+   <div class="container">
       <div class="card p-3" style="max-width: 540px;">
          <div class="row no-gutters">
             <div class="col-md-3 col-lg-3">
-               <img :src="contact.image" class="rounded my-auto" width="85" height="110"/>
+               <img :src="contact.image" class="rounded my-auto" width="85" height="110" />
             </div>
             <div class="col-md-6">
                <div class="card-body">
@@ -13,7 +13,7 @@
                </div>
             </div>
             <div class="col-md-3">
-               <button class="btn btn-outline-primary mt-1 mb-3"><i class="fa fa-pencil"></i></button>
+               <button @click="selectDetails(contact.id)" class="btn btn-outline-primary mt-1 mb-3"><i class="fa fa-pencil"></i></button>
                <button @click="deleteContact(contact.id)" class="btn btn-danger"><i class="fa fa-trash"></i></button>
             </div>
          </div>
@@ -27,6 +27,10 @@ export default {
       contact: { type: Object, required: true }
    },
    methods: {
+      selectDetails(id) {
+         localStorage.setItem('selectedIdDetails', id)
+         window.location.href = '/contact-details'
+      },
       deleteContact(id) {
          let result = confirm(`Do you want to delete ${this.contact.name}'s contact?`)
          if(result) {

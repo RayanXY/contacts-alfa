@@ -7,7 +7,6 @@
          <div class="col-auto">
             <a href="/add-contact" class="btn btn-primary">Add Contact</a>
          </div>
-
       </div>
 
       <div

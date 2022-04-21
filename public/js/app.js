@@ -5297,6 +5297,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    selectDetails: function selectDetails(id) {
+      localStorage.setItem('selectedIdDetails', id);
+      window.location.href = '/contact-details';
+    },
     deleteContact: function deleteContact(id) {
       var result = confirm("Do you want to delete ".concat(this.contact.name, "'s contact?"));
 
@@ -5351,6 +5355,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5358,7 +5378,8 @@ __webpack_require__.r(__webpack_exports__);
       name: '',
       number: '',
       email: '',
-      image: ''
+      image: '',
+      errors: []
     };
   },
   methods: {
@@ -5373,20 +5394,24 @@ __webpack_require__.r(__webpack_exports__);
         image: this.image,
         number: this.number
       };
+      var isValid = this.validateInputs(contact);
 
-      if (localStorage.getItem('contacts') === null) {
-        var contacts = [];
-        contacts.push(contact);
-        localStorage.setItem('contacts', JSON.stringify(contacts));
-      } else {
-        var _contacts = JSON.parse(localStorage.getItem('contacts'));
+      if (isValid) {
+        if (localStorage.getItem('contacts') === null) {
+          var contacts = [];
+          contacts.push(contact);
+          localStorage.setItem('contacts', JSON.stringify(contacts));
+        } else {
+          var _contacts = JSON.parse(localStorage.getItem('contacts'));
 
-        _contacts.push(contact);
+          _contacts.push(contact);
 
-        localStorage.setItem('contacts', JSON.stringify(_contacts));
+          localStorage.setItem('contacts', JSON.stringify(_contacts));
+        }
+
+        alert("Contact was added!");
+        this.resetForm();
       }
-
-      this.resetForm();
     },
     createImage: function createImage(img) {
       var _this = this;
@@ -5405,7 +5430,92 @@ __webpack_require__.r(__webpack_exports__);
       this.number = '';
       this.email = '';
       this.image = '';
+    },
+    validateInputs: function validateInputs(contact) {
+      if (!contact.name || contact.name.length < 5) {
+        this.errors.push('Name is required and should have at least 5 characters');
+      }
+
+      if (!contact.number || isNaN(contact.number) || contact.number.length !== 9) {
+        this.errors.push('Number is required and should have 9 numbers (only numbers)');
+      }
+
+      if (!contact.email || this.validEmail(contact.email)) {
+        this.errors.push('E-mail is required and should valid');
+      }
+
+      if (!contact.image) {
+        this.errors.push('Image is required');
+      }
+
+      if (this.errors.length) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    validEmail: function validEmail(email) {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ContactDetails.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ContactDetails.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      contact: ''
+    };
+  },
+  mounted: function mounted() {
+    var id = localStorage.getItem('selectedIdDetails');
+    var contacts = JSON.parse(localStorage.getItem('contacts'));
+    this.contact = contacts.find(function (c) {
+      return c.id === parseInt(id);
+    });
   }
 });
 
@@ -5423,7 +5533,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _components_ContactCard_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/ContactCard.vue */ "./resources/js/components/ContactCard.vue");
-//
 //
 //
 //
@@ -5508,7 +5617,8 @@ window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js
 
 Vue.component('contacts-list', (__webpack_require__(/*! ./pages/ContactsList.vue */ "./resources/js/pages/ContactsList.vue")["default"]));
 Vue.component('add-contact', (__webpack_require__(/*! ./pages/AddContact.vue */ "./resources/js/pages/AddContact.vue")["default"]));
-Vue.component('contact-card', (__webpack_require__(/*! ./components/ContactCard.vue */ "./resources/js/components/ContactCard.vue")["default"]));
+Vue.component('contact-details', (__webpack_require__(/*! ./pages/ContactDetails.vue */ "./resources/js/pages/ContactDetails.vue")["default"])); // Vue.component('contact-card', require('./components/ContactCard.vue').default); 
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -28081,6 +28191,45 @@ component.options.__file = "resources/js/pages/AddContact.vue"
 
 /***/ }),
 
+/***/ "./resources/js/pages/ContactDetails.vue":
+/*!***********************************************!*\
+  !*** ./resources/js/pages/ContactDetails.vue ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ContactDetails_vue_vue_type_template_id_11d742cb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ContactDetails.vue?vue&type=template&id=11d742cb& */ "./resources/js/pages/ContactDetails.vue?vue&type=template&id=11d742cb&");
+/* harmony import */ var _ContactDetails_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ContactDetails.vue?vue&type=script&lang=js& */ "./resources/js/pages/ContactDetails.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ContactDetails_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ContactDetails_vue_vue_type_template_id_11d742cb___WEBPACK_IMPORTED_MODULE_0__.render,
+  _ContactDetails_vue_vue_type_template_id_11d742cb___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/ContactDetails.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/pages/ContactsList.vue":
 /*!*********************************************!*\
   !*** ./resources/js/pages/ContactsList.vue ***!
@@ -28152,6 +28301,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/pages/ContactDetails.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/pages/ContactDetails.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactDetails_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ContactDetails.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ContactDetails.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactDetails_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/pages/ContactsList.vue?vue&type=script&lang=js&":
 /*!**********************************************************************!*\
   !*** ./resources/js/pages/ContactsList.vue?vue&type=script&lang=js& ***!
@@ -28202,6 +28367,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/pages/ContactDetails.vue?vue&type=template&id=11d742cb&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/pages/ContactDetails.vue?vue&type=template&id=11d742cb& ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactDetails_vue_vue_type_template_id_11d742cb___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactDetails_vue_vue_type_template_id_11d742cb___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ContactDetails_vue_vue_type_template_id_11d742cb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ContactDetails.vue?vue&type=template&id=11d742cb& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ContactDetails.vue?vue&type=template&id=11d742cb&");
+
+
+/***/ }),
+
 /***/ "./resources/js/pages/ContactsList.vue?vue&type=template&id=49e19d1a&":
 /*!****************************************************************************!*\
   !*** ./resources/js/pages/ContactsList.vue?vue&type=template&id=49e19d1a& ***!
@@ -28235,7 +28417,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "container" }, [
     _c(
       "div",
       { staticClass: "card p-3", staticStyle: { "max-width": "540px" } },
@@ -28265,7 +28447,18 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-md-3" }, [
-            _vm._m(0),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-primary mt-1 mb-3",
+                on: {
+                  click: function ($event) {
+                    return _vm.selectDetails(_vm.contact.id)
+                  },
+                },
+              },
+              [_c("i", { staticClass: "fa fa-pencil" })]
+            ),
             _vm._v(" "),
             _c(
               "button",
@@ -28285,16 +28478,7 @@ var render = function () {
     ),
   ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "btn btn-outline-primary mt-1 mb-3" }, [
-      _c("i", { staticClass: "fa fa-pencil" }),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -28318,11 +28502,11 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container p-3" }, [
-    _c("div", { staticClass: "card p-3" }, [
-      _c("h2", [_vm._v("Add Contact")]),
+    _c("div", { staticClass: "card p-3 form-group" }, [
+      _vm._m(0),
       _vm._v(" "),
       _c("div", { staticClass: "mb-2" }, [
-        _c("span", [_vm._v("Name:")]),
+        _c("label", { attrs: { for: "inputName" } }, [_vm._v("Name")]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -28333,7 +28517,8 @@ var render = function () {
               expression: "name",
             },
           ],
-          attrs: { type: "text", placeholder: "Name" },
+          staticClass: "form-control",
+          attrs: { id: "inputName", type: "text", placeholder: "John Doe" },
           domProps: { value: _vm.name },
           on: {
             input: function ($event) {
@@ -28347,7 +28532,7 @@ var render = function () {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "mb-2" }, [
-        _c("span", [_vm._v("Number:")]),
+        _c("label", { attrs: { for: "inputNumber" } }, [_vm._v("Number")]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -28358,7 +28543,8 @@ var render = function () {
               expression: "number",
             },
           ],
-          attrs: { type: "text", placeholder: "Number" },
+          staticClass: "form-control",
+          attrs: { id: "inputNumber", type: "text", placeholder: "123456789" },
           domProps: { value: _vm.number },
           on: {
             input: function ($event) {
@@ -28372,7 +28558,7 @@ var render = function () {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "mb-2" }, [
-        _c("span", [_vm._v("E-mail:")]),
+        _c("label", { attrs: { for: "inputEmail" } }, [_vm._v("E-mail")]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -28383,7 +28569,12 @@ var render = function () {
               expression: "email",
             },
           ],
-          attrs: { type: "email", placeholder: "E-mail" },
+          staticClass: "form-control",
+          attrs: {
+            id: "inputEmail",
+            type: "email",
+            placeholder: "example@mail.com",
+          },
           domProps: { value: _vm.email },
           on: {
             input: function ($event) {
@@ -28397,23 +28588,153 @@ var render = function () {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "mb-2" }, [
-        _c("span", [_vm._v("Image:")]),
+        _c("label", { attrs: { for: "inputImage" } }, [_vm._v("Image")]),
         _vm._v(" "),
         _c("input", {
-          attrs: { type: "file", placeholder: "E-mail", accept: "image/*" },
+          staticClass: "form-control",
+          attrs: {
+            id: "inputImage",
+            type: "file",
+            placeholder: "E-mail",
+            accept: "image/*",
+          },
           on: { change: _vm.imageChange },
         }),
       ]),
       _vm._v(" "),
       _c(
         "button",
-        { staticClass: "btn btn-primary", on: { click: _vm.save } },
+        {
+          staticClass: "mt-2 btn btn-primary",
+          attrs: { disabled: !_vm.image },
+          on: { click: _vm.save },
+        },
         [_vm._v("Save")]
       ),
     ]),
+    _vm._v(" "),
+    _vm.errors.length
+      ? _c("div", [
+          _c("strong", [_vm._v("Please, correct the following errors:")]),
+          _vm._v(" "),
+          _c(
+            "ul",
+            _vm._l(_vm.errors, function (error, index) {
+              return _c("li", { key: index }, [
+                _vm._v("\n            " + _vm._s(_vm.errors) + "\n         "),
+              ])
+            }),
+            0
+          ),
+        ])
+      : _vm._e(),
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row justify-content-between mb-2" }, [
+      _c("div", { staticClass: "col-auto" }, [
+        _c("h2", [_vm._v("Add Contact")]),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-auto" }, [
+        _c("a", { staticClass: "btn btn-primary", attrs: { href: "/" } }, [
+          _vm._v("Back"),
+        ]),
+      ]),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ContactDetails.vue?vue&type=template&id=11d742cb&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/ContactDetails.vue?vue&type=template&id=11d742cb& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "container p-3", staticStyle: { "max-width": "450px" } },
+    [
+      _c("div", { staticClass: "card p-3 form-group" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", [
+          _c("img", {
+            staticClass: "rounded mx-auto d-block",
+            attrs: { src: _vm.contact.image, width: "85", height: "110" },
+          }),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mb-2" }, [
+          _c("label", { attrs: { for: "inputName" } }, [_vm._v("Name")]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { id: "inputName", type: "text", readonly: "" },
+            domProps: { value: _vm.contact.name },
+          }),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mb-2" }, [
+          _c("label", { attrs: { for: "inputNumber" } }, [_vm._v("Number")]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { id: "inputNumber", type: "text", readonly: "" },
+            domProps: { value: _vm.contact.number },
+          }),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mb-2" }, [
+          _c("label", { attrs: { for: "inputEmail" } }, [_vm._v("E-mail")]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { id: "inputEmail", type: "email", readonly: "" },
+            domProps: { value: _vm.contact.email },
+          }),
+        ]),
+      ]),
+    ]
+  )
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row justify-content-between mb-2" }, [
+      _c("div", { staticClass: "col-auto" }, [
+        _c("h2", [_vm._v("Contact Details")]),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-auto" }, [
+        _c("a", { staticClass: "btn btn-primary", attrs: { href: "/" } }, [
+          _vm._v("Back"),
+        ]),
+      ]),
+    ])
+  },
+]
 render._withStripped = true
 
 
